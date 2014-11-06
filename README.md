@@ -21,6 +21,12 @@ gradle init --type java-library
 
 gradle --gui
 
+gradle --daemon [task name]
+
+gradle --stop
+
+gradle wrapper
+
 
 ## Options
 
@@ -37,3 +43,9 @@ gradle -q(--quiet)
 gradle -b(--build-file) [gradle file]
 
 gradle -?(-h or --help)
+
+
+## GRADLE_OPTS
+
+-Dorg.gradle.daemon=true
+
