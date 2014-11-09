@@ -49,3 +49,15 @@ gradle -?(-h or --help)
 
 -Dorg.gradle.daemon=true
 
+
+## jar 
+
+```
+// output jar ${baseName}-${appendix}-${version}-${classifier}.jar
+jar {
+    baseName = 'example'
+    appendix = 'bin'
+    version = '0.1'
+    classifier = 'jdk17'
+}
+```
