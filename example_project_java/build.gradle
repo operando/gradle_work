@@ -1,0 +1,32 @@
+apply plugin: 'java'
+
+def defaultEncoding = 'UTF-8'
+
+
+[compileJava, compileTestJava]*.options*.encoding = defaultEncoding
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile "junit:junit:4.11"
+}
+
+// output jar ${baseName}-${appendix}-${version}-${classifier}.jar
+jar {
+    baseName = 'example'
+    appendix = 'bin'
+    version = '0.1'
+    classifier = 'jdk17'
+//    archiveName = 'example.jar'
+}
+
+javadoc {
+//    destinationDir = "${buildDir}/dist/javadoc"
+    title = "example library ver 0.1"
+    options.links << 'http://docs.oracle.com/javase/jp/7/api'
+}
