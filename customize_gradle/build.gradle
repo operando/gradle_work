@@ -1,0 +1,32 @@
+apply plugin: 'java'
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+        resources {
+            srcDir 'src'
+        }
+    }
+    integrationTest {
+        // default : src/integrationTest/java
+        // java.srcDir file('src/intTest/java')
+        compileClasspath = sourceSets.main.output + configurations.testCompile
+        runtimeClasspath = output + compileClasspath + configurations.testCompile
+    }
+}
+
+processResources {
+    includeEmptyDirs = false
+}
+
+dependencies {
+    integrationTestCompile 'xxx:xxx:xxx'
+    integrationTestRuntime 'yyy:yyy:yyy'
+}
+
+task integrationTest(type: Test) {
+    testClassesDir = sourceSets.integrationTest.output.classesDir
+    classpath = sourceSets.integrationTest.runtimeClasspath
+}
