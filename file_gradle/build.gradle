@@ -1,0 +1,118 @@
+FileCollection collections = files("test.txt","test2.txt","test.html")
+
+// as 変換
+List list = collections as List
+Set set1 = collections as Set
+File[] array = collections as File[]
+
+// getFiles() Grrovy簡潔記法
+Set set2 = collections.files
+
+
+// FileCollectionの演算
+FileCollection collections2 = collections + files("test3.txt")
+println collections2.files
+
+FileCollection collections3 = collections2 - files("test3.txt")
+println collections3.files
+
+// filter
+FileCollection textFiles = collections.filter { file ->
+  file.name.endsWith ".txt"
+}
+
+println textFiles.files
+
+// File Tree
+FileTree ft = fileTree("src")
+ft.each {
+  println it.name
+}
+
+// include
+println "---include---"
+FileTree javaFiles = ft.include "**/*.java"
+javaFiles.each {
+  println it.name
+}
+
+// exclude
+println "---exclude---"
+fileTree("src").exclude("**/Test.java").each {
+  println it.name
+}
+
+// クロージャー
+println "---クロージャー---"
+FileTree tree = fileTree("src") {
+  include "**/*.java"
+  exclude "**/*.txt"
+}
+
+tree.each {
+  println it.name
+}
+
+// FileVisitor
+ft = fileTree("src")
+ft.visit { file ->
+  println "name : " + file.getName()
+}
+
+ft.visit(new FileVisitor() {
+  void visitDir(FileVisitDetails fileDitails) {
+    println "path : " + fileDitails.getPath()
+  }
+
+  void visitFile(FileVisitDetails fileDitails) {
+    println "file : " + fileDitails.name
+  }
+})
+
+
+// Copy
+copy {
+  from "src"
+  into "test"
+  include "**/*.java"
+  exclude "**/*.txt"
+  rename { fileName ->
+    if(fileName == "Test.java") {
+      fileName.replace("Test", "RenameTest")
+    }
+  }
+}
+
+// templete
+String targetName = 'SimpleBean'
+copy {
+  from 'template'
+  into 'output'
+
+  expand packageName:'com.example.bean', className:targetName,
+        fields:['String':'name', 'int':'value']
+
+  rename 'template.java', "${targetName}.java"
+}
+
+// CopySpec
+copy {
+  into 'replication'
+  exclude '**/dummy.txt'
+
+  from('original') {
+      exclude 'sub1/', 'sub2/'
+  }
+  into('internal') {
+      from 'original/sub1', 'original/sub2'
+  }
+}
+
+// Delete
+delete "output", "replication", "test"
+
+// mkdir
+mkdir "test_make"
+
+// new File
+file("new_file.txt").write("new file", "UTF-8")
